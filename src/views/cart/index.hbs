@@ -39,6 +39,7 @@
           <input type="text" id="cart-promo-input" placeholder="Введите промокод" maxlength="80" />
           <button type="button" class="btn cart-promo-add">Активировать</button>
         </div>
+        <p id="cart-promo-message" class="promo-message" style="display:none;"></p>
         <div id="cart-promo-list" class="promo-list">
           {{#each promoCodes}}
             <div class="promo-chip" data-code="{{this}}">

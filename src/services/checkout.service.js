@@ -12,10 +12,10 @@ function splitPromoCodes(input) {
 }
 
 function normalizePromoCodes(input) {
-  if (Array.isArray(input)) {
-    return splitPromoCodes(input.join(' '));
-  }
-  return splitPromoCodes(input);
+  const codes = Array.isArray(input)
+    ? splitPromoCodes(input.join(' '))
+    : splitPromoCodes(input);
+  return [...new Set(codes)];
 }
 
 function isItemScope(scope) {

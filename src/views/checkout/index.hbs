@@ -2,41 +2,41 @@
   <h1>Оформление заказа</h1>
 
   {{#if cartItems.length}}
+    {{#if errors}}
+      <ul class="errors">
+        {{#each errors}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    {{/if}}
+
     <form method="post" class="form card">
-      <label>Телефон
-        <input type="text" name="phone" required />
+      <label>Телефон (Россия)
+        <input type="tel" name="phone" value="{{form.phone}}" placeholder="+7 999 123-45-67" pattern="^(\\+7|8)\\s?\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{2}[\\s-]?\\d{2}$" title="Формат: +7 999 123-45-67" required />
       </label>
 
-      <label>Выберите адрес
-        <select name="address_id">
-          <option value="">Новый адрес</option>
-          {{#each addresses}}
-            <option value="{{id}}">{{city}}, {{street}}, {{house}}</option>
-          {{/each}}
-        </select>
-      </label>
-
-      <h3>Новый адрес (если не выбран из списка)</h3>
+      <h3>Адрес доставки</h3>
+      <p class="category">Доставка работает только по городу Казань.</p>
       <label>Город
-        <input type="text" name="city" />
+        <input type="text" value="Казань" readonly />
       </label>
       <label>Улица
-        <input type="text" name="street" />
+        <input type="text" name="street" value="{{form.street}}" required />
       </label>
       <label>Дом
-        <input type="text" name="house" />
+        <input type="text" name="house" value="{{form.house}}" required />
       </label>
       <label>Квартира
-        <input type="text" name="apartment" />
+        <input type="text" name="apartment" value="{{form.apartment}}" />
       </label>
       <label>Комментарий к адресу
-        <input type="text" name="comment_text" />
+        <input type="text" name="comment_text" value="{{form.comment_text}}" />
       </label>
 
       <label>Удобное время доставки
         <select name="slot_id" required>
           {{#each slots}}
-            <option value="{{id}}">{{label}}</option>
+            <option value="{{id}}" {{#if (eq id ../form.slot_id)}}selected{{/if}}>{{label}}</option>
           {{/each}}
         </select>
       </label>

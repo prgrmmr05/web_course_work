@@ -90,6 +90,28 @@
     $list.html(html);
   }
 
+  let promoMessageTimer = null;
+  function setPromoMessage(text, type) {
+    const $message = $('#cart-promo-message');
+    if (!$message.length) return;
+
+    $message.removeClass('is-error is-success');
+    if (type === 'error') $message.addClass('is-error');
+    if (type === 'success') $message.addClass('is-success');
+
+    $message.text(text || '');
+    if (!text) {
+      $message.hide();
+      return;
+    }
+    $message.show();
+
+    if (promoMessageTimer) clearTimeout(promoMessageTimer);
+    promoMessageTimer = setTimeout(function () {
+      $message.fadeOut(200);
+    }, 3000);
+  }
+
   function triggerCartItemUpdate($card, quantity) {
     const productId = Number($card.data('product-id'));
     if (!productId) return;
@@ -343,7 +365,10 @@
   $(document).on('click', '.cart-promo-add', function () {
     const $input = $('#cart-promo-input');
     const code = String($input.val() || '').trim();
-    if (!code) return;
+    if (!code) {
+      setPromoMessage('Введите промокод', 'error');
+      return;
+    }
 
     $.ajax({
       url: '/api/cart/promos',
@@ -353,11 +378,12 @@
     }).done(function (response) {
       if (!response.ok) return;
       $input.val('');
+      setPromoMessage('Промокод добавлен', 'success');
       if (response.data && response.data.pricing) {
         updateCartSummary(response.data.pricing);
       }
     }).fail(function (xhr) {
-      alert(xhr.responseJSON?.message || 'Не удалось активировать промокод');
+      setPromoMessage(xhr.responseJSON?.message || 'Не удалось активировать промокод', 'error');
     });
   });
 
@@ -380,8 +406,9 @@
       if (response.data && response.data.pricing) {
         updateCartSummary(response.data.pricing);
       }
+      setPromoMessage('Промокод удален', 'success');
     }).fail(function (xhr) {
-      alert(xhr.responseJSON?.message || 'Не удалось удалить промокод');
+      setPromoMessage(xhr.responseJSON?.message || 'Не удалось удалить промокод', 'error');
     });
   });
 

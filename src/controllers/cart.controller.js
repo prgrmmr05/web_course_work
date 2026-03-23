@@ -64,10 +64,12 @@ async function addPromoCode(req, res) {
     }
 
     const current = getSessionPromoCodes(req);
-    const candidate = checkoutService.normalizePromoCodes([...current, code]);
-    const pricing = await checkoutService.buildCartPricingWithPromos(req.session.user.id, candidate);
-
     const normalizedCode = code.toUpperCase();
+    if (current.includes(normalizedCode)) {
+      return res.status(400).json({ ok: false, message: 'Промокод уже добавлен' });
+    }
+    const candidate = checkoutService.normalizePromoCodes([...current, normalizedCode]);
+    const pricing = await checkoutService.buildCartPricingWithPromos(req.session.user.id, candidate);
     const rejected = (pricing.rejectedPromoCodes || []).find((x) => x.code === normalizedCode);
     if (rejected) {
       return res.status(400).json({ ok: false, message: rejected.reason });
