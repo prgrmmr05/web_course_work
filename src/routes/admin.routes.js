@@ -50,6 +50,9 @@ router.get('/orders', adminController.ordersList);
 router.get('/orders/:id/edit', adminController.orderEditForm);
 router.post('/orders/:id', adminController.orderUpdate);
 
+router.get('/dispatch', adminController.dispatchList);
+router.post('/dispatch/:id', adminController.dispatchAssign);
+
 router.get('/users', adminOnly, adminController.usersList);
 router.get('/users/new', adminOnly, adminController.userNewForm);
 router.post('/users', adminOnly, adminController.userCreate);

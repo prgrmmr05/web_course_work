@@ -17,7 +17,7 @@
             <a href="/courier/orders">Доставка</a>
           {{/if}}
           {{#if (or (eq currentUser.role_code "admin") (eq currentUser.role_code "manager"))}}
-            <a href="/admin">Админка</a>
+            <a href="/admin">Админ-панель</a>
           {{/if}}
           <form action="/auth/logout" method="post" class="inline-form">
             <button type="submit" class="link-btn">Выйти</button>

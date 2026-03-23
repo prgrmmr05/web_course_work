@@ -97,8 +97,8 @@ async function listCourierOrders(userId, roleCode) {
      JOIN user_addresses a ON a.id = o.address_id
      JOIN delivery_slots ds ON ds.id = o.slot_id
      LEFT JOIN users cu ON cu.id = o.courier_id
-     WHERE (o.courier_id IS NULL AND o.status IN ('confirmed', 'packing', 'delivery'))
-        OR (o.courier_id = ? AND o.status IN ('confirmed', 'packing', 'delivery'))
+    WHERE (o.courier_id IS NULL AND o.status IN ('new', 'confirmed', 'packing', 'delivery'))
+       OR (o.courier_id = ? AND o.status IN ('new', 'confirmed', 'packing', 'delivery'))
      ORDER BY o.id DESC`,
     [userId]
   );

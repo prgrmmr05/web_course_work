@@ -484,6 +484,26 @@ async function orderUpdate(req, res, next) {
   } catch (error) { return next(error); }
 }
 
+async function dispatchList(req, res, next) {
+  try {
+    const search = (req.query.search || '').trim();
+    const [items, couriers] = await Promise.all([
+      adminOrderModel.listOrdersForDispatch(search),
+      adminOrderModel.listCouriers()
+    ]);
+    return renderAdmin(res, 'admin/dispatch/list', { items, couriers, search });
+  } catch (error) { return next(error); }
+}
+
+async function dispatchAssign(req, res, next) {
+  try {
+    const orderId = Number(req.params.id);
+    const courierId = Number(req.body.courier_id || 0) || null;
+    await adminOrderModel.assignCourierToOrder(orderId, courierId, req.session.user?.id || null);
+    return res.redirect('/admin/dispatch');
+  } catch (error) { return next(error); }
+}
+
 async function usersList(req, res, next) {
   try {
     const search = (req.query.search || '').trim();
@@ -728,6 +748,8 @@ module.exports = {
   ordersList,
   orderEditForm,
   orderUpdate,
+  dispatchList,
+  dispatchAssign,
   usersList,
   userNewForm,
   userCreate,
